@@ -1,41 +1,26 @@
-import asyncio
-from playwright.async_api import async_playwright
 import logging
+import asyncio
+from downloader import baixar_arquivo
+from updater import atualizar_planilha_google
 
 logging.basicConfig(level=logging.INFO)
 
-async def baixar_arquivo():
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=False)
-        context = await browser.new_context(accept_downloads=True)
-        page = await context.new_page()
+async def main():
+        """Função principal que orquestra todo o processo"""
+        try: 
+            logging.info("Iniciando o processo de download e atualização...")
 
-        await page.goto("https://www.governo.sp.gov.br/transferencias-voluntarias-2023-dep-estaduais/")
-        logging.info("Página carregada com sucesso.")
+            # 1. Download de todos os arquivos
+            arquivo_baixados = await baixar_arquivo()
 
-        # Seletor específico do iframe do Power BI
-        iframe = page.frame_locator('iframe[title="Emendas_TV_2023"]')
-        logging.info("Iframe do dashboard Power BI encontrado.")
+            # 2. Atualizar a planilha do Google
+            #await atualizar_planilha_google(arquivo_baixados)
 
-        # Espera a renderização do terceiro g.tile
-        botao_visual = iframe.locator("g.tile").nth(2)
-        await botao_visual.wait_for(state="visible")
-        logging.info("Elemento visual do botão 'Baixar os dados' localizado.")
+            logging.info("Processo concluído com sucesso!")
 
-        # Aguarda e clica com confirmação de download
-        async with page.expect_download() as download_info:
-            logging.info("Clicando no botão 'Baixar os dados' (g.tile #3)...")
-            await botao_visual.click(force=True)
-        logging.info("Aguardando download...")
+        except Exception as e:
+            logging.error(f"Ocorreu um erro: {e}")
+            raise
 
-        # Salva o arquivo baixado
-        download = await download_info.value
-        filename = "dados_emendas_2023.xlsx"
-        await download.save_as(filename)
-        logging.info(f"Download concluído com sucesso! Arquivo salvo como {filename}")
-
-        await browser.close()
-        logging.info("Navegador fechado.")
-
-# Execução segura
-asyncio.run(baixar_arquivo())
+if __name__ == "__main__":
+    asyncio.run(main())
