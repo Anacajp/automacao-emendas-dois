@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 def main():
     try:
-    # Define o diretório de download
+        # Define o diretório de download (corrigir indentação)
         download_dir = os.path.join(os.getcwd(), 'downloads')
         os.makedirs(download_dir, exist_ok=True)
 
