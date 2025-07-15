@@ -92,33 +92,3 @@ async def baixar_arquivo():
 
     logging.info(f"Total de arquivos baixados: {len(arquivos_baixados)}")
     return arquivos_baixados
-
-#         await page.goto("https://www.governo.sp.gov.br/transferencias-voluntarias-2024-dep-estaduais/")
-#         logging.info("Página carregada com sucesso.")
-
-#         # Seletor específico do iframe do Power BI
-#         iframe = page.frame_locator('iframe[title="Emendas_TV_2024 - Estaduais"]')
-#         logging.info("Iframe do dashboard Power BI encontrado.")
-
-#         # Espera a renderização do terceiro g.tile
-#         botao_visual = iframe.locator("g.tile").nth(2)
-#         await botao_visual.wait_for(state="visible")
-#         logging.info("Elemento visual do botão 'Baixar os dados' localizado.")
-
-#         # Aguarda e clica com confirmação de download
-#         async with page.expect_download() as download_info:
-#             logging.info("Clicando no botão 'Baixar os dados' (g.tile #3)...")
-#             await botao_visual.click(force=True)
-#         logging.info("Aguardando download...")
-
-#         # Salva o arquivo baixado
-#         download = await download_info.value
-#         filename = "blabla.xlsx"
-#         await download.save_as(filename)
-#         logging.info(f"Download concluído com sucesso! Arquivo salvo como {filename}")
-
-#         await browser.close()
-#         logging.info("Navegador fechado.")
-
-# # Execução segura
-# asyncio.run(baixar_arquivo())
