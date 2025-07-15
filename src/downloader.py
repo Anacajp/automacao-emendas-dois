@@ -16,9 +16,19 @@ def setup_driver(download_dir=None):
             "download.default_directory": download_dir, # Caminho exato onde salvar os arquivos baixados
             "download.prompt_for_download": False, # Não mostrar caixa de confirmação de download
             "download.directory_upgrade": True, # Atualiza o diretório de download se mudar
-            "safebrowsing.enabled": True # Habilita o modo de navegação segura
+            "safebrowsing.enabled": True, # Habilita o modo de navegação segura
+            "safebrowsing.disable_download_protection": True # Adicionar esta configuração pode ajudar
         }
         options.add_experimental_option("prefs", prefs)
+    
+    # Headers e configurações do navegador
+    options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+    options.add_argument("--accept-lang=pt-BR,pt;q=0.9,en;q=0.8")
+    
+    # Configurações para downloads automáticos
+    options.add_argument("--disable-web-security")
+    options.add_argument("--allow-running-insecure-content")
+    options.add_argument("--disable-extensions")
     
     # options.add_argument("--headless")  # Executa o Chrome em modo headless
     options.add_argument("--no-sandbox")
