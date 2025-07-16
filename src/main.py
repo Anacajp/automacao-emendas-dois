@@ -11,10 +11,13 @@ async def main():
             logging.info("Iniciando o processo de download e atualização...")
 
             # 1. Download de todos os arquivos
-            arquivo_baixados = await baixar_arquivo()
+            arquivos_baixados = await baixar_arquivo()
 
             # 2. Atualizar a planilha do Google
-            #await atualizar_planilha_google(arquivo_baixados)
+            if arquivos_baixados:
+                await atualizar_planilha_google(arquivos_baixados)
+            else:
+                logging.warning("Nenhum arquivo foi baixado. Pulando atualização da planilha.")
 
             logging.info("Processo concluído com sucesso!")
 
