@@ -79,6 +79,9 @@ def atualizar_aba_planilha(worksheet, df, nome_aba):
         # Limpa TODA a aba
         worksheet.clear()
         
+        # Substitui NaN por string vazia
+        df = df.fillna('')
+        
         # Prepara cabeçalhos + dados
         headers = [df.columns.tolist()]
         dados = df.values.tolist()
