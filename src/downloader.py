@@ -47,8 +47,8 @@ async def baixar_arquivo():
             args=['--no-sandbox', '--disable-dev-shm-usage']  # Para Cloud Run
         )
         context = await browser.new_context(accept_downloads=True)
-        # Aumentar timeout MUITO para Cloud Run (conexão pode ser lenta)
-        context.set_default_timeout(300000)  # 5 minutos
+        # Aumentar timeout ABSURDO para Cloud Run (super lenta)
+        context.set_default_timeout(600000)  # 10 minutos
         
         for i, site in enumerate(URLS, 1):
             try:
@@ -64,11 +64,11 @@ async def baixar_arquivo():
 
                 #Espera a renderização do terceiro g.tile (com timeout maior)
                 botao_visual = iframe.locator("g.tile").nth(2)
-                await botao_visual.wait_for(state="visible", timeout=180000)  # 3 minutos
+                await botao_visual.wait_for(state="visible", timeout=600000)  # 10 minutos
                 logging.info(f"Elemento visual do botão 'Baixar os dados' localizado para o {site['nome_arquivo']}.")
 
                 # Aguarda e clica com confirmação de download (timeout maior para downloads)
-                async with page.expect_download(timeout=300000) as download_info:  # 5 minutos para download
+                async with page.expect_download(timeout=600000) as download_info:  # 10 minutos para download
                     logging.info(f"Clicando no botão 'Baixar os dados' (g.tile #3) para o {site['nome_arquivo']}...")
                     await botao_visual.click(force=True)
 
