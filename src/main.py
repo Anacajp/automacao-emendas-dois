@@ -13,7 +13,7 @@ logging.basicConfig(
 async def main():
     """Função principal que orquestra todo o processo"""
     try: 
-        logging.info("🚀 Iniciando o processo de download e atualização...")
+        logging.info("Iniciando o processo de download e atualização...")
         
         # Verificar variáveis de ambiente essenciais
         if not os.getenv('GOOGLE_SHEET_ID'):

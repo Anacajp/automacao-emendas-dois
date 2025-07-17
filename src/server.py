@@ -38,8 +38,20 @@ def run_automation():
             cwd="/app"
         )
         
+        # Exibir logs detalhados do main.py
+        if result.stdout:
+            logging.info("📋 Output do main.py:")
+            for line in result.stdout.strip().split('\n'):
+                if line.strip():
+                    logging.info(f"   {line}")
+        
+        if result.stderr:
+            logging.warning("⚠️ Stderr do main.py:")
+            for line in result.stderr.strip().split('\n'):
+                if line.strip():
+                    logging.warning(f"   {line}")
+        
         logging.info("✅ Automação concluída com sucesso!")
-        logging.info(f"Output: {result.stdout}")
         
         return jsonify({
             "status": "completed", 
