@@ -42,28 +42,33 @@ async def baixar_arquivo():
 
     async with async_playwright() as p:
         # IMPORTANTE: headless=True para Cloud Run (sem interface gráfica)
-        browser = await p.chromium.launch(headless=True)
+        browser = await p.chromium.launch(
+            headless=True,
+            args=['--no-sandbox', '--disable-dev-shm-usage']  # Para Cloud Run
+        )
         context = await browser.new_context(accept_downloads=True)
+        # Aumentar timeout para Cloud Run (conexão mais lenta)
+        context.set_default_timeout(120000)  # 2 minutos
         
         for i, site in enumerate(URLS, 1):
             try:
                 logging.info(f"Iniciando o download do arquivo {i} de {len(URLS)}: {site['url']}")
 
                 page = await context.new_page()
-                await page.goto(site["url"])
+                await page.goto(site["url"], timeout=60000)  # 60 segundos para carregamento
                 logging.info(f"Página {i} carregada com sucesso.")
 
                 # Seletor específico do iframe do Power BI
                 iframe = page.frame_locator(f'iframe[title="{site["iframe_title"]}"]')
                 logging.info(f"Iframe do dashboard Power BI encontrado para o arquivo {site['nome_arquivo']}.")
 
-                #Espera a renderização do terceiro g.tile
+                #Espera a renderização do terceiro g.tile (com timeout maior)
                 botao_visual = iframe.locator("g.tile").nth(2)
-                await botao_visual.wait_for(state="visible")
+                await botao_visual.wait_for(state="visible", timeout=90000)  # 90 segundos
                 logging.info(f"Elemento visual do botão 'Baixar os dados' localizado para o {site['nome_arquivo']}.")
 
-                # Aguarda e clica com confirmação de download
-                async with page.expect_download() as download_info:
+                # Aguarda e clica com confirmação de download (timeout maior para downloads)
+                async with page.expect_download(timeout=120000) as download_info:  # 2 minutos para download
                     logging.info(f"Clicando no botão 'Baixar os dados' (g.tile #3) para o {site['nome_arquivo']}...")
                     await botao_visual.click(force=True)
 
