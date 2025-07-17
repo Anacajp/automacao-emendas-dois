@@ -41,7 +41,8 @@ async def baixar_arquivo():
     arquivos_baixados = []
 
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=False)
+        # IMPORTANTE: headless=True para Cloud Run (sem interface gráfica)
+        browser = await p.chromium.launch(headless=True)
         context = await browser.new_context(accept_downloads=True)
         
         for i, site in enumerate(URLS, 1):

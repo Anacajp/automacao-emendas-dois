@@ -1,0 +1,20 @@
+# Ignorar arquivos desnecessários no Docker
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.venv/
+venv/
+.env
+.git/
+.gitignore
+README.md
+DEPLOY.md
+.vscode/
+*.log
+
+# Ignorar downloads locais (serão criados no container)
+download/*.xlsx
+download/*.xls
